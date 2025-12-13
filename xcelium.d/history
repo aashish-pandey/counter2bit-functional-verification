@@ -1,0 +1,5 @@
+//
+// File created by:  xrun
+// Do not modify this file
+
+s1::(09Dec2025:19:46:35):( /opt/eda/cadence/XCELIUM2309/tools/xcelium/bin/xrun RTL/Counter2bit.sv -access +rwc )

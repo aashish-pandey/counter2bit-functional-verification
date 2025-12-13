@@ -1,0 +1,32 @@
+xrun: 23.09-s012: (c) Copyright 1995-2024 Cadence Design Systems, Inc.
+TOOL:	xrun	23.09-s012: Started on Dec 09, 2025 at 19:46:35 EST
+/opt/eda/cadence/XCELIUM2309/tools/xcelium/bin/xrun
+	RTL/Counter2bit.sv
+	-access +rwc
+file: RTL/Counter2bit.sv
+	module worklib.Counter2bit:sv
+		errors: 0, warnings: 0
+		Caching library 'worklib' ....... Done
+	Elaborating the design hierarchy:
+	Top level design units:
+		Counter2bit
+	Building instance overlay tables: .................... Done
+	Generating native compiled code:
+		worklib.Counter2bit:sv <0x578af04b>
+			streams:   3, words:  1626
+	Building instance specific data structures.
+	Loading native compiled code:     .................... Done
+	Design hierarchy summary:
+		         Instances  Unique
+		Modules:         1       1
+		Registers:       4       4
+		Scalar wires:    3       -
+		Always blocks:   2       2
+		Process Clocks:  1       1
+	Writing initial simulation snapshot: worklib.Counter2bit:sv
+Loading snapshot worklib.Counter2bit:sv .................... Done
+xcelium> source /opt/eda/cadence/XCELIUM2309/tools/xcelium/files/xmsimrc
+xcelium> run
+xmsim: *W,RNQUIE: Simulation is complete.
+xcelium> exit
+TOOL:	xrun	23.09-s012: Exiting on Dec 09, 2025 at 19:46:43 EST  (total: 00:00:08)

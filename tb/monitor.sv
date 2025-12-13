@@ -1,22 +1,31 @@
 class Monitor;
     virtual counter_if vif;
+    Transaction T;
     Scoreboard sb;
     bit [1:0] pcount;
+    bit prev_direction;
 
-    function new(counter_if vif, Scoreboard sb);
+    function new(virtual counter_if vif, Scoreboard sb);
         this.vif = vif;
         this.sb = sb;
         this.pcount = 2'b0;
+        this.prev_direction = 1'b0;
     endfunction
 
     task run();
         forever begin
-            #1;
-            Transaction T = new();
+            @(posedge vif.clk);
+            if (vif.reset) begin
+                this.pcount = 0;
+                this.prev_direction = 0;
+                @(posedge vif.clk);
+                continue;
+            end
+            T = new();
             T.count = vif.count;
             T.up_down = vif.up_down;
             T.prev_count = this.pcount;
-            if(vif.up_down == 0)begin
+            if(this.prev_direction == 0)begin
                 if(T.prev_count == 2'd0)
                     T.expected_count = 2'd3;
                 else
@@ -29,6 +38,7 @@ class Monitor;
                     T.expected_count = T.prev_count + 1;
             end
             this.pcount = T.count;
+            this.prev_direction = T.up_down;
 
             sb.check(T);
             

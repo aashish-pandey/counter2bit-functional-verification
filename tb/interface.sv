@@ -1,3 +1,4 @@
+
 interface counter_if;
     logic clk;
     logic reset;

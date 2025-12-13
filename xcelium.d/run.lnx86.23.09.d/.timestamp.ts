@@ -1,0 +1,1 @@
+1765327437 /home/pandeyap/Desktop/personal_project/counter2bit-functional-verification/RTL/Counter2bit.sv

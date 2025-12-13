@@ -1,3 +1,5 @@
+import tb_pkg::*;
+
 module tb_counter2bit;
     counter_if vif();
     initial begin

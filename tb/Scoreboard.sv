@@ -1,3 +1,4 @@
+
 class Scoreboard;
     function void check (Transaction T);
         if(T.count != T.expected_count)
