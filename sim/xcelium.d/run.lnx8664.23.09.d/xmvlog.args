@@ -1,0 +1,35 @@
+//
+// File created by:  xrun
+// Do not modify this file
+//
+-XLMODE
+./xcelium.d/run.lnx8664.23.09.d
+-RUNMODE
+-UVMNOSINGLESTEP
+-define
+UVM_PLI
+-INCDIR
+../tb
+-INCDIR
+../RTL
+../tb/interface.sv
+../tb/tb_pkg.sv
+../RTL/Counter2bit.sv
+../tb/tb_counter2bit.sv
+-CDSLIB
+./xcelium.d/run.lnx8664.23.09.d/cdsrun.lib
+-HDLVAR
+./xcelium.d/run.lnx8664.23.09.d/hdlrun.var
+-I_INCDIR
+/opt/eda/cadence/XCELIUM2309/tools/methodology/UVM/CDNS-1.1d/sv/src
+-DEFINE
+USE_PARAMETERIZED_WRAPPER
+-I_INCDIR
+/opt/eda/cadence/XCELIUM2309/tools/methodology/UVM/CDNS-1.1d/additions/sv
+-no_analogsolver
+-MESSAGES
+-UPDATE
+-XLLIBSTORE
+./xcelium.d/run.lnx8664.23.09.d/xllibs
+-ALLOWUNBOUND
+-ENABLEOIGW

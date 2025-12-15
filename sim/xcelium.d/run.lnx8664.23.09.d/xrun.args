@@ -1,0 +1,12 @@
+//
+// File created by:  xrun
+// Do not modify this file
+//
+-64bit
+-uvm
+-f
+filelist.f
+-access
++rwc
++UVM_VERBOSITY=UVM_LOW
+-licqueue
