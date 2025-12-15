@@ -1,49 +1,44 @@
-# Counter2bit Functional Verification (SystemVerilog)
+# Counter2bit Functional & UVM Verification (SystemVerilog)
 
 ## Overview
 
-This project implements a **functional verification environment** for a **2-bit up/down synchronous counter** using **SystemVerilog** and a **UVM-inspired, lightweight testbench architecture**.  
-The goal of this project is not to use full UVM, but to build a strong understanding of **core verification fundamentals**, including:
+This project implements **two verification environments** for a **2-bit synchronous up/down counter**, developed using **SystemVerilog** and **Cadence Xcelium (`xrun`)**:
 
-- Transaction-based stimulus generation
-- Driver–Monitor separation
-- Scoreboard-based checking
-- Cycle-accurate modeling of synchronous logic
-- Debugging direction-change corner cases
+1. **A lightweight, UVM-inspired functional testbench**
+2. **A full UVM-based verification environment**
 
-Simulation is performed using **Cadence Xcelium (`xrun`)**.
+The project is intentionally structured to demonstrate a **progressive verification learning path** — moving from manual transaction-based verification to an **industry-standard UVM methodology**.
+
+The focus is on **verification correctness, timing accuracy, and architecture clarity**, rather than DUT complexity.
 
 ---
 
 ## Design Under Test (DUT)
 
-### Counter Description
-- **Width:** 2-bit  
-- **Type:** Synchronous up/down counter  
+### Counter Specification
+- **Width:** 2-bit
+- **Type:** Synchronous up/down counter
 - **Inputs:**
   - `clk` – clock
   - `reset` – synchronous reset
   - `up_down` – direction control  
-    - `0` → count down  
-    - `1` → count up
+    - `1` → count up  
+    - `0` → count down
 - **Output:**
-  - `count` – 2-bit counter value
+  - `count` – 2-bit output
 - **Behavior:**
-  - Counter updates on the rising edge of the clock
+  - Updates on rising clock edge
   - Wrap-around behavior (modulo-4)
 
 ---
 
-## Verification Methodology
+## Verification Objectives
 
-The testbench follows a **layered verification architecture**, inspired by UVM but implemented manually for clarity and learning purposes.
-
-### Concepts Practiced
-- Clock-synchronous stimulus application
-- Transaction abstraction
-- Passive monitoring
-- Golden-model-based scoreboarding
-- Handling one-cycle latency during control signal changes
+- Verify correct up/down counting
+- Validate wrap-around behavior
+- Detect corner cases during **direction changes**
+- Model **cycle-accurate synchronous behavior**
+- Compare **manual testbench vs UVM-based verification**
 
 ---
 
@@ -55,7 +50,7 @@ COUNTER2BIT-FUNCTIONAL-VERIFICATION/
 ├── RTL/
 │   └── Counter2bit.sv
 │
-├── tb/
+├── tb/                     # Lightweight functional testbench
 │   ├── interface.sv
 │   ├── Transaction.sv
 │   ├── driver.sv
@@ -64,89 +59,108 @@ COUNTER2BIT-FUNCTIONAL-VERIFICATION/
 │   ├── tb_pkg.sv
 │   └── tb_counter2bit.sv
 │
+├── uvm_tb/                 # Full UVM-based testbench
+│   ├── my_item.sv
+│   ├── my_sequence.sv
+│   ├── my_sequencer.sv
+│   ├── my_driver.sv
+│   ├── my_monitor.sv
+│   ├── my_scoreboard.sv
+│   ├── my_agent.sv
+│   ├── my_env.sv
+│   ├── my_test.sv
+│   └── top.sv
+│
 ├── sim/
 │   ├── filelist.f
+│   ├── uvm_filelist.f
 │   ├── run.sh
+│   ├── uvm_run.sh
 │   ├── xrun.log
 │   ├── xrun.history
 │   ├── xrun.key
 │   └── xcelium.d/
 │
 ├── xcelium.d/
-│   └── worklib/
 │
 └── README.md
 ```
 
 ---
 
-## Testbench Components
+## Verification Methodology
 
-### RTL
-- **Counter2bit.sv**  
-  Implements the 2-bit synchronous up/down counter.
+### 1. Lightweight Functional Testbench (`tb/`)
 
----
+This environment is **UVM-inspired but manually implemented** to reinforce verification fundamentals.
 
-### Testbench (`tb/`)
+#### Concepts Practiced
+- Transaction abstraction without UVM
+- Driver / Monitor separation
+- Passive monitoring
+- Golden reference modeling
+- Explicit handling of **one-cycle latency**
 
-#### interface.sv
-Defines a SystemVerilog interface bundling all DUT signals.  
-Improves connectivity and keeps driver and monitor logic clean.
+#### Component Overview
 
----
+- **interface.sv**  
+  Bundles DUT signals for clean connectivity.
 
-#### Transaction.sv
-Defines a transaction object representing a single stimulus event.  
-Used to pass information between testbench components.
+- **Transaction.sv**  
+  Encapsulates stimulus and expected behavior.
 
----
+- **driver.sv**  
+  Applies synchronous stimulus to the DUT.
 
-#### driver.sv
-- Drives stimulus onto the DUT via the interface
-- Applies `up_down` changes in a clock-aware manner
-- Responsible only for driving signals (no checking)
+- **monitor.sv**  
+  Observes DUT behavior and captures:
+  - current count
+  - previous count
+  - previous direction
 
----
+- **Scoreboard.sv**  
+  Implements a cycle-accurate golden model and reports PASS/FAIL results.
 
-#### monitor.sv
-- Passively observes DUT signals
-- Captures current count, previous count, and direction
-- Sends observed data to the scoreboard
-
----
-
-#### Scoreboard.sv
-- Implements a golden reference model
-- Predicts expected counter values based on:
-  - Previous count
-  - **Previous direction**
-- Compares predicted values with DUT output
-- Reports PASS/FAIL messages with full context
-
-A key learning point is correctly handling the **direction-change cycle**, where the counter behavior depends on the previous value of `up_down`, not the current one.
+This environment intentionally avoids UVM automation to make timing behavior **explicit and transparent**.
 
 ---
 
-#### tb_pkg.sv
-Central package file containing shared definitions and imports for the testbench.
+### 2. UVM Testbench (`uvm_tb/`)
 
----
+A **complete UVM verification environment** following standard UVM architecture and flow.
 
-#### tb_counter2bit.sv
-Top-level testbench module:
-- Instantiates DUT and all testbench components
-- Generates clock and reset
-- Controls simulation flow
+#### UVM Architecture
+
+- **my_item.sv** – Sequence item representing counter transactions
+- **my_sequence.sv** – Generates directed stimulus
+- **my_sequencer.sv** – Arbitrates sequence execution
+- **my_driver.sv** – Drives transactions onto the DUT
+- **my_monitor.sv** – Passively samples DUT behavior
+- **my_scoreboard.sv** – Implements cycle-accurate reference model
+- **my_agent.sv** – Encapsulates driver, monitor, and sequencer
+- **my_env.sv** – Integrates agent and scoreboard
+- **my_test.sv** – Configures and runs the UVM test
+- **top.sv** – Top-level module instantiating DUT and launching `run_test()`
 
 ---
 
 ## Simulation Flow
 
-1. All files are compiled using `filelist.f`
-2. Simulation is launched using `xrun` via `run.sh`
-3. Results are logged in `xrun.log`
-4. Compiled simulation artifacts are stored in `xcelium.d/`
+### Functional Testbench
+```bash
+cd sim
+./run.sh
+```
+
+### UVM Testbench
+```bash
+cd sim
+./uvm_run.sh
+```
+
+- Compilation controlled via `filelist.f` and `uvm_filelist.f`
+- Simulation executed using **Cadence Xcelium (`xrun`)**
+- Logs stored in `xrun.log`
 
 ---
 
@@ -154,22 +168,27 @@ Top-level testbench module:
 
 ### Direction Change Corner Case
 
-A common failure observed during development occurred only when the `up_down` signal changed.
+A subtle failure was observed **only when the `up_down` signal changed**.
 
 **Root Cause:**  
-In synchronous designs, outputs update based on **previous-cycle inputs**.  
-Using the current value of `up_down` to predict the current output leads to a one-cycle mismatch.
+In synchronous designs, outputs depend on **previous-cycle inputs**.
 
-**Resolution:**  
-The scoreboard models hardware behavior accurately by tracking and using:
+**Incorrect Modeling:**  
+Predicting output using the current value of `up_down`.
+
+**Correct Modeling:**  
+The scoreboard tracks and uses:
 - `prev_count`
 - `prev_up_down`
+
+This fix is implemented consistently in **both** the functional and UVM testbenches.
 
 ---
 
 ## Tools Used
 
 - **Language:** SystemVerilog
+- **Methodology:** Functional Verification + UVM
 - **Simulator:** Cadence Xcelium (`xrun`)
 - **Editor:** VS Code
 - **Platform:** Linux / macOS
@@ -178,11 +197,12 @@ The scoreboard models hardware behavior accurately by tracking and using:
 
 ## Future Enhancements
 
-- Add SystemVerilog Assertions (SVA)
-- Introduce constrained-random stimulus
-- Add functional coverage
-- Parameterize counter width
-- Migrate to full UVM environment
+- SystemVerilog Assertions (SVA)
+- Functional coverage
+- Constrained-random sequences
+- Parameterized counter width
+- Regression automation
+- Reusable scoreboard infrastructure
 
 ---
 
@@ -190,4 +210,4 @@ The scoreboard models hardware behavior accurately by tracking and using:
 
 **Aashish Pandey**  
 MS in Computer Engineering  
-Focus: Digital Design, RTL Verification, Hardware Security
+Focus: RTL Verification (UVM), Digital Design, Hardware Security
