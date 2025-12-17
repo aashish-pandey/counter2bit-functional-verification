@@ -5,8 +5,6 @@
 -INPUT
 "@source /opt/eda/cadence/XCELIUM2309/tools/methodology/UVM/CDNS-1.1d/additions/sv/files/tcl/uvm_sim.tcl"
 +UVM_VERBOSITY=UVM_LOW
-+incdir+../tb
-+incdir+../RTL
 -uvmhome
 /opt/eda/cadence/XCELIUM2309/tools/methodology/UVM/CDNS-1.1d
 -sv_lib
@@ -19,7 +17,7 @@
 +EMGRLOG
 xrun.log
 -XLSTIME
-1765757972
+1765943712
 -XLKEEP
 -XLMODE
 ./xcelium.d/run.lnx8664.23.09.d

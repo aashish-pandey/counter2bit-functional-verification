@@ -8,14 +8,10 @@
 -UVMNOSINGLESTEP
 -define
 UVM_PLI
--INCDIR
-../tb
--INCDIR
-../RTL
-../tb/interface.sv
-../tb/tb_pkg.sv
 ../RTL/Counter2bit.sv
-../tb/tb_counter2bit.sv
+../tb/interface.sv
+../uvm_tb/uvm_tb_pkg.sv
+../uvm_tb/top.sv
 -CDSLIB
 ./xcelium.d/run.lnx8664.23.09.d/cdsrun.lib
 -HDLVAR

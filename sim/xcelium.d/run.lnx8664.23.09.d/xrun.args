@@ -5,7 +5,7 @@
 -64bit
 -uvm
 -f
-filelist.f
+uvm_filelist.f
 -access
 +rwc
 +UVM_VERBOSITY=UVM_LOW

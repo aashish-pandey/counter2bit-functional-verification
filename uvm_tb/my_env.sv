@@ -1,3 +1,5 @@
+`include "uvm_macros.svh"
+import uvm_pkg::*;
 class my_env extends uvm_env;
 
     `uvm_component_utils(my_env)
@@ -12,6 +14,7 @@ class my_env extends uvm_env;
 
     function void build_phase(uvm_phase phase);
         super.build_phase(phase);
+        
         agent = my_agent::type_id::create("agent", this);
         sb = my_scoreboard::type_id::create("sb", this);
 

@@ -1,3 +1,5 @@
+`include "uvm_macros.svh"
+import uvm_pkg::*;
 class my_item extends uvm_sequence_item;
 
     bit up_down;
@@ -23,8 +25,8 @@ class my_item extends uvm_sequence_item;
     //printing function
     function void do_print(uvm_printer printer);
         super.do_print(printer);
-        printer.print_field_int("up_down", up_down, 1);
-        printer.print_field_int("prev_direction", prev_direction, 1);
+        // printer.print_field_int("up_down", up_down, 1);
+        // printer.print_field_int("prev_direction", prev_direction, 1);
     endfunction
 
 
